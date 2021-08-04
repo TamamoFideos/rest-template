@@ -1,8 +1,15 @@
-const {getUsers, postUsers, putUsers, deleteUser, patchUser} = require("../controllers/user-controller");
+//Imports
 const { Router } = require('express');
 const {check} = require("express-validator");
-const {fieldValidator} = require("../middlewares/field-validator");
 const router = Router();
+
+//Controller
+const {getUsers, postUsers, putUsers, deleteUser, patchUser} = require("../controllers/user-controller");
+
+//Validations and helpers
+const {fieldValidator} = require("../middlewares/field-validator");
+const {roleValidator, emailValidator, existUserByID} = require("../helpers/db-validators");
+
 
 router.get('/', getUsers);
 
@@ -11,13 +18,22 @@ router.post('/', [
     check('name', 'Name is required').not().isEmpty(),
     check('password', 'Password is required and must have more than 6 letters').not().isEmpty().isLength({min: 6}),
     check('name', 'Name is required').not().isEmpty(),
-    check('role', 'Is not a role').isIn(['ADMIN_ROLE', 'USER_ROLE']),
+    check('role').custom( roleValidator ),
+    check('email').custom( emailValidator ),
     fieldValidator
 ], postUsers);
 
-router.put('/:id',  putUsers);
+router.put('/:id', [
+    check('id', 'Is not a Mongo ID').isMongoId(),
+    check('id').custom(existUserByID),
+    fieldValidator
+    ],  putUsers);
 
-router.delete('/',  deleteUser);
+router.delete('/:id',[
+    check('id', 'Is not a Mongo ID').isMongoId(),
+    check('id').custom(existUserByID),
+    fieldValidator
+],  deleteUser);
 
 router.patch('/', patchUser);
 
