@@ -9,6 +9,9 @@ const {getUsers, postUsers, putUsers, deleteUser, patchUser} = require("../contr
 //Validations and helpers
 const {fieldValidator} = require("../middlewares/field-validator");
 const {roleValidator, emailValidator, existUserByID} = require("../helpers/db-validators");
+const {validateToken} = require("../middlewares/jws-validator");
+
+
 
 
 router.get('/', getUsers);
@@ -30,6 +33,7 @@ router.put('/:id', [
     ],  putUsers);
 
 router.delete('/:id',[
+    validateToken,
     check('id', 'Is not a Mongo ID').isMongoId(),
     check('id').custom(existUserByID),
     fieldValidator
