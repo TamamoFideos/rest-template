@@ -62,8 +62,7 @@ const deleteUser = async (req, res) => {
     res.json({
         user,
         authUser : req.user
-    }
-    )
+    })
 }
 
 module.exports = {

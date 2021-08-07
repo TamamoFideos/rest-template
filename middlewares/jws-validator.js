@@ -11,8 +11,8 @@ const validateToken = async (req = request, res = response, next) => {
     }
 
     try {
-        const { uuid } = jwt.verify(token, process.env.SECRET_OR_PUBLIC_KEY);
-        const user = await User.findById(uuid);
+        const { uid } = jwt.verify(token, process.env.SECRET_OR_PUBLIC_KEY);
+        const user = await User.findById(uid);
 
         if(!user){
             return  res.status(401).json({

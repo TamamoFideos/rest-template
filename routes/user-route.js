@@ -10,6 +10,7 @@ const {getUsers, postUsers, putUsers, deleteUser, patchUser} = require("../contr
 const {fieldValidator} = require("../middlewares/field-validator");
 const {roleValidator, emailValidator, existUserByID} = require("../helpers/db-validators");
 const {validateToken} = require("../middlewares/jws-validator");
+const {isAdminRole, hasRole} = require("../middlewares/role-validator");
 
 
 
@@ -34,6 +35,8 @@ router.put('/:id', [
 
 router.delete('/:id',[
     validateToken,
+    //isAdminRole,
+    hasRole('ADMIN_ROLE', 'SELL_ROLE'),
     check('id', 'Is not a Mongo ID').isMongoId(),
     check('id').custom(existUserByID),
     fieldValidator
