@@ -45,7 +45,6 @@ const putUsers = async (req, res) => {
 
     const user = await User.findByIdAndUpdate(id, leftovers);
     res.json({
-        msg: 'put user- controller',
         user
     })
 }
