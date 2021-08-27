@@ -1,5 +1,6 @@
 const Role = require("../model/role");
 const User = require("../model/user");
+const Product = require("../model/product");
 const Category = require("../model/category");
 
 const roleValidator = async (role = '') => {
@@ -26,6 +27,13 @@ const existUserByID = async (id = '') => {
     }
 }
 
+const existProductByID = async (id = '') => {
+    const existID = await Product.findById(id);
+    if(!existID){
+        throw new Error(`ID '${id}' does not exist!`)
+    }
+}
+
 const existCategoryByID = async (id = '') => {
     const existID = await Category.findById(id);
     if(!existID){
@@ -34,6 +42,7 @@ const existCategoryByID = async (id = '') => {
 }
 
 const existCategoryName = async(name = '') => {
+    name = name.toUpperCase();
     const existName = await Category.findOne({name});
     if(existName){
         throw new Error(`Name: '${name}' already exists`);
@@ -46,5 +55,6 @@ module.exports = {
     emailValidator,
     existUserByID,
     existCategoryByID,
-    existCategoryName
+    existCategoryName,
+    existProductByID
 }

@@ -45,11 +45,13 @@ const createCategory = async (req = request, res = response) => {
  }
 
 const updateCategory = async (req = request, res = response) => {
-    const {status, _id, user, ...leftOvers} = req.body;
+    const {status, _id, user, ...data} = req.body;
     const {id} = req.params;
+
     //Take the id from the logged user by the token
-    leftOvers.user = req.user._id;
-    const category = await Category.findByIdAndUpdate(id, leftOvers);
+    data.user = req.user._id;
+    data.name = data.name.toUpperCase();
+    const category = await Category.findByIdAndUpdate(id, data, {new : true});
     res.json(category);
 }
 

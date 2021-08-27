@@ -15,5 +15,8 @@ const categorySchema = Schema({
         required : [true, 'User is required']
     }
 })
-
+categorySchema.methods.toJSON = function () {
+    const {__v,state, ...category} = this.toObject();
+    return category;
+}
 module.exports = model('Category', categorySchema)
