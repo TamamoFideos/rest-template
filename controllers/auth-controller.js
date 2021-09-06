@@ -7,7 +7,7 @@ const {googleVerify} = require("../helpers/google-verify");
 
 const login = async (req, res) => {
     const {email, password} = req.body
-
+    console.log('Se hizo el login');
     try {
         //Check if email exist
         const user = await User.findOne({email});
